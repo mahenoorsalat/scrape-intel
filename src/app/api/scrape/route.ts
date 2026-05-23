@@ -5,7 +5,8 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { scrapeUrl } from "@/lib/scraper";
-import { extractBasicData, extractMediumData } from "@/lib/extractor";
+import { extractBasicData, extractMediumData, extractEmails, extractPhoneNumbers, extractSocialProfiles } from "@/lib/extractor";
+import * as cheerio from "cheerio";
 import { detectTechStack } from "@/lib/techDetector";
 import { enrichWithAI } from "@/lib/aiEnricher";
 import { validateUrls } from "@/lib/validator";
@@ -94,6 +95,41 @@ export async function POST(request: NextRequest) {
         if (extractionLevel >= 2) {
           logger.info("Extracting enhanced details...", url);
           companyData.medium = extractMediumData(scrapeResult.$);
+        }
+
+        // Smart subpage scanning for contacts (Emails, Phones, Socials)
+        const subpageUrls = findSubpageLinks(scrapeResult.$, scrapeResult.redirectedUrl || url);
+        if (subpageUrls.length > 0) {
+          logger.info(`Found ${subpageUrls.length} potential contact/about subpage(s) to scan: ${subpageUrls.join(", ")}`, url);
+          
+          // Fetch and extract contact info from subpages in parallel (with short 6s timeouts to keep it fast)
+          const subpagePromises = subpageUrls.map(async (subUrl) => {
+            try {
+              const subResult = await scrapeUrl(subUrl, logger, 6000);
+              const subEmails = extractEmails(subResult.html);
+              const subPhones = extractPhoneNumbers(subResult.html, subResult.$);
+              const subSocials = extractSocialProfiles(subResult.$);
+              return { subEmails, subPhones, subSocials };
+            } catch {
+              return { subEmails: [], subPhones: [], subSocials: {} };
+            }
+          });
+
+          const subResults = await Promise.all(subpagePromises);
+          
+          // Merge discovered contacts and socials
+          for (const sub of subResults) {
+            basicData.emails = [...new Set([...basicData.emails, ...sub.subEmails])];
+            basicData.phoneNumbers = [...new Set([...basicData.phoneNumbers, ...sub.subPhones])];
+            if (companyData.medium?.socialProfiles) {
+              companyData.medium.socialProfiles = {
+                ...companyData.medium.socialProfiles,
+                ...Object.fromEntries(
+                  Object.entries(sub.subSocials).filter(([, val]) => val)
+                ),
+              };
+            }
+          }
         }
 
         // Level 3: Advanced extraction
@@ -191,4 +227,34 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+/**
+ * Identify contact, about, or support page URLs on a website homepage.
+ */
+function findSubpageLinks($: cheerio.CheerioAPI, baseUrl: string): string[] {
+  const links = new Set<string>();
+  const patterns = [/contact/i, /about/i, /support/i, /privacy/i, /terms/i];
+
+  $("a[href]").each((_, el) => {
+    const href = $(el).attr("href")?.trim();
+    const text = $(el).text().trim();
+    if (!href) return;
+
+    // Check if link matches patterns in text or href
+    const isMatch = patterns.some((p) => p.test(href) || p.test(text));
+    if (isMatch) {
+      try {
+        const absoluteUrl = new URL(href, baseUrl).toString();
+        // Only crawl pages on the same domain
+        if (new URL(absoluteUrl).hostname === new URL(baseUrl).hostname) {
+          links.add(absoluteUrl);
+        }
+      } catch {
+        // ignore invalid urls
+      }
+    }
+  });
+
+  return Array.from(links).slice(0, 3); // Fetch at most 3 subpages to keep it fast
 }
