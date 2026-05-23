@@ -1,0 +1,171 @@
+[
+  {
+    "id": "company-1-1716500000000",
+    "scrapedAt": "2026-05-23T12:00:00.000Z",
+    "sourceUrl": "https://vercel.com",
+    "status": "success",
+    "basic": {
+      "companyName": "Vercel",
+      "websiteUrl": "https://vercel.com",
+      "emails": ["support@vercel.com"],
+      "phoneNumbers": []
+    },
+    "medium": {
+      "socialProfiles": {
+        "twitter": "https://twitter.com/vercel",
+        "github": "https://github.com/vercel",
+        "linkedin": "https://linkedin.com/company/vercel"
+      },
+      "description": "Vercel's frontend cloud gives developers frameworks, workflows, and infrastructure to build a faster, more personalized web.",
+      "industry": "Cloud Computing / Developer Tools",
+      "yearFounded": "2015",
+      "productsServices": [
+        "Vercel Platform",
+        "Next.js Framework",
+        "Edge Functions",
+        "Vercel AI SDK",
+        "Analytics",
+        "Web Application Firewall"
+      ]
+    },
+    "advanced": {
+      "techStack": [
+        "Next.js",
+        "React",
+        "Vercel",
+        "Google Analytics",
+        "Cloudflare",
+        "Segment"
+      ],
+      "currentProjects": [
+        "Vercel AI SDK",
+        "Next.js 15",
+        "Edge Runtime",
+        "Vercel Firewall"
+      ],
+      "competitors": [
+        "Netlify",
+        "AWS Amplify",
+        "Cloudflare Pages",
+        "Heroku",
+        "Render"
+      ],
+      "marketPositioning": "Market leader in frontend cloud and deployment platform",
+      "companySizeEstimate": "Medium (500-1000 employees)",
+      "fundingStage": "Series D ($150M)"
+    }
+  },
+  {
+    "id": "company-2-1716500001000",
+    "scrapedAt": "2026-05-23T12:00:02.000Z",
+    "sourceUrl": "https://stripe.com",
+    "status": "success",
+    "basic": {
+      "companyName": "Stripe",
+      "websiteUrl": "https://stripe.com",
+      "emails": ["info@stripe.com", "support@stripe.com"],
+      "phoneNumbers": ["+1-888-926-2289"]
+    },
+    "medium": {
+      "socialProfiles": {
+        "twitter": "https://twitter.com/stripe",
+        "linkedin": "https://linkedin.com/company/stripe",
+        "github": "https://github.com/stripe"
+      },
+      "description": "Stripe is a financial infrastructure platform for businesses. Millions of companies use Stripe to accept payments, grow revenue, and accelerate new business opportunities.",
+      "industry": "Financial Technology / Payments",
+      "yearFounded": "2010",
+      "productsServices": [
+        "Payment Processing",
+        "Stripe Billing",
+        "Stripe Connect",
+        "Stripe Atlas",
+        "Stripe Radar (Fraud Prevention)",
+        "Stripe Terminal",
+        "Stripe Treasury"
+      ]
+    },
+    "advanced": {
+      "techStack": [
+        "React",
+        "Ruby",
+        "Google Analytics",
+        "Stripe",
+        "Cloudflare",
+        "Sentry"
+      ],
+      "currentProjects": [
+        "Stripe Financial Connections",
+        "Revenue Recognition",
+        "Stripe Tax",
+        "Stripe Identity"
+      ],
+      "competitors": [
+        "PayPal",
+        "Square",
+        "Adyen",
+        "Braintree",
+        "Shopify Payments"
+      ],
+      "marketPositioning": "Market leader in online payment infrastructure",
+      "companySizeEstimate": "Large (5000+ employees)",
+      "fundingStage": "Series I ($6.5B+ total raised)"
+    }
+  },
+  {
+    "id": "company-3-1716500003000",
+    "scrapedAt": "2026-05-23T12:00:04.000Z",
+    "sourceUrl": "https://notion.so",
+    "status": "partial",
+    "basic": {
+      "companyName": "Notion",
+      "websiteUrl": "https://notion.so",
+      "emails": ["team@makenotion.com"],
+      "phoneNumbers": []
+    },
+    "medium": {
+      "socialProfiles": {
+        "twitter": "https://twitter.com/NotionHQ",
+        "linkedin": "https://linkedin.com/company/notionhq",
+        "instagram": "https://instagram.com/notionhq",
+        "youtube": "https://youtube.com/@notionhq"
+      },
+      "description": "Notion is the connected workspace where better, faster work happens. Write, plan, organize, and collaborate — all in one place.",
+      "industry": "Productivity / SaaS",
+      "yearFounded": "2013",
+      "productsServices": [
+        "Notion Workspace",
+        "Notion AI",
+        "Notion Projects",
+        "Notion Docs",
+        "Notion Wikis",
+        "Notion Calendar"
+      ]
+    },
+    "advanced": {
+      "techStack": [
+        "React",
+        "Next.js",
+        "Cloudflare",
+        "Google Analytics",
+        "Intercom",
+        "Segment"
+      ],
+      "currentProjects": [
+        "Notion AI",
+        "Notion Projects (project management)",
+        "Notion Calendar integration"
+      ],
+      "competitors": [
+        "Confluence",
+        "Coda",
+        "Obsidian",
+        "Monday.com",
+        "Asana"
+      ],
+      "marketPositioning": "Leader in all-in-one workspace and knowledge management",
+      "companySizeEstimate": "Medium (500-1000 employees)",
+      "fundingStage": "Series C ($275M raised)"
+    }
+  }
+]
