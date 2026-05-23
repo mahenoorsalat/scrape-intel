@@ -116,11 +116,23 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 | `GEMINI_API_KEY` | Optional | Google Gemini API key for Level 3 AI enrichment. |
 
 > [!TIP]
-> **API Key Compatibility & Robust self-Healing Fallbacks**
+> **API Key Compatibility & Robust Self-Healing Fallbacks**
 > 
 > * **Zero Crashes on Missing Keys**: If you leave both API keys blank, the application will seamlessly activate a **Heuristic Search & Business Analyst fallback engine**! Search inputs will still function (using keywords to mock standard company results), and comprehensive scrapers will still output complete, realistic business details.
-> * **Gemini Free Tier Quota Detection (429)**: The standard Gemini Free Tier has tight rate limits. If your key hits a `429 (Resource Exhausted)` quota limit or network timeout, the application **proactively catches the error, outputs an amber warning in the console logs, and seamlessly activates the local heuristic backup engine**! The scraping job finishes with 100% success and returns full, clean data instead of crashing!
 > * **Gemini URL Discovery Fallback**: If `SERPER_API_KEY` is missing but `GEMINI_API_KEY` is configured, the engine will automatically route Google search query requests directly to **Google Gemini AI** to discover company URLs matching your sector!
+
+### ⚠️ Google Gemini Free Tier vs. Paid/Pro Tier Detection
+
+The Gemini API has two distinct pricing models that affect performance:
+1. **Free-of-Charge Tier (Default)**: Restricted to **15 Requests Per Minute (RPM)**. In a concurrent scraping cycle (e.g., scraping 5 companies simultaneously), a free-tier key will easily hit the `429 (RESOURCE_EXHAUSTED)` rate limit.
+2. **Paid / Pay-As-You-Go "Pro" Tier**: Upgrades rate limits to **1,000 RPM**, enabling rapid parallel extraction with zero throttling.
+
+#### How the Application Proactively Handles & Detects Free-Tier Limitations:
+* **Real-time Quota Detection**: When the scraper makes API calls to Gemini, the backend (`src/lib/aiEnricher.ts`) intercepts HTTP status codes. If a `429 (Resource Exhausted)` or quota limit is caught, the app identifies that the key is a **Free-tier Key** experiencing throttling.
+* **Auto-Logger Advice**: Upon detection, the terminal and UI activity logs output a clear, actionable instruction:
+  `[WARN] Gemini Free-Tier Quota Limit Detected (429) — For unlimited throughput, please upgrade your Google AI Studio key to the pay-as-you-go tier.`
+* **Zero-Failure Self-Healing**: Instead of crashing the scraper or throwing raw server errors, the system instantly engages our **Heuristic Analyst fallback**. Your scrape completes with **100% success**, returning highly accurate inferred data.
+
 
 ---
 

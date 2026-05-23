@@ -126,7 +126,11 @@ ${pageText}`;
     };
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown AI error";
-    logger.error(`AI enrichment failed: ${message}`, url);
+    if (message.includes("429") || message.includes("Quota exceeded") || message.includes("RESOURCE_EXHAUSTED")) {
+      logger.warn("Gemini Free-Tier Quota Limit Detected (429) — For unlimited parallel throughput, please upgrade your Google AI Studio key to the pay-as-you-go Pro tier. Instantly engaging self-healing heuristic engine...", url);
+    } else {
+      logger.error(`AI enrichment failed: ${message}`, url);
+    }
     return getHeuristicEnrichment(html, companyName, url, logger);
   }
 }
